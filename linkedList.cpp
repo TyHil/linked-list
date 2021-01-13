@@ -16,7 +16,7 @@ linkedList::~linkedList() {// Destructor
   clear();
 }
 
-void linkedList::clear() {// Removes all nodes and data
+void linkedList::clear() {// Clears and deletes all nodes and data
   node * i = head;
   while (i != NULL) {
     node * temp = i->next;
@@ -25,7 +25,7 @@ void linkedList::clear() {// Removes all nodes and data
   }
 }
 
-void linkedList::add(void * newData) {// Adds a new node and data to the end
+void linkedList::add(void * newData) {// Adds a new node with specified data to the end of the linked list
   node *newNode = new node;
   newNode->next = NULL;
   newNode->dataPtr = newData;
@@ -49,7 +49,7 @@ int linkedList::size() {// Returns the number of nodes
   return index;
 }
 
-node * linkedList::get(const int indexGoal) {// Returns the node at the specified index
+node * linkedList::get(const int indexGoal) {// Returns a pointer to the node at a specific index
   node * i = head;
   int index = 0;
   while (index != indexGoal and i != NULL) {
@@ -59,13 +59,13 @@ node * linkedList::get(const int indexGoal) {// Returns the node at the specifie
   return i;
 }
 
-void linkedList::set(const int indexGoal, void * newData) {// Replaces the node at the specified index with new data
+void linkedList::set(const int indexGoal, void * newData) {// Replaces the data of node at the specified index with new data
   node * i = get(indexGoal);
   free(i->dataPtr);
   i->dataPtr = newData;
 }
 
-void linkedList::insert(const int indexGoal, void * newData) {// Inserts new node and data before the specified index
+void linkedList::insert(const int indexGoal, void * newData) {// Inserts a new node and new data before the specified index
   if (indexGoal == 0) {// replace head
     node * newNode = new node;
     newNode->dataPtr = newData;
@@ -81,7 +81,7 @@ void linkedList::insert(const int indexGoal, void * newData) {// Inserts new nod
   }
 }
 
-void linkedList::remove(const int indexGoal) {// Removes the node and data at the specified index from this list
+void linkedList::remove(const int indexGoal) {// Removes the node and data at the specified index
   if (indexGoal == 0) {
     node * i = get(1);
     delete head;
@@ -93,11 +93,11 @@ void linkedList::remove(const int indexGoal) {// Removes the node and data at th
   }
 }
 
-bool linkedList::isEmpty() {// Returns true if empty
+bool linkedList::isEmpty() {// Returns true if the linked list has no elements in it
   return head == NULL;
 }
 
-void linkedList::swap(const int index1, const int index2) {// Switches the data of specified indexes
+void linkedList::swap(const int index1, const int index2) {// Switches the data pointers of the specified indexes
   node * i = get(index1);
   node * j = get(index2);
   void * temp = i->dataPtr;
@@ -105,13 +105,13 @@ void linkedList::swap(const int index1, const int index2) {// Switches the data 
   j->dataPtr = temp;
 }
 
-linkedList * linkedList::subList(const int start, const int length) {//Returns a new list containing data from a sub-range
+linkedList * linkedList::subList(const int start, const int length) {//Creates and returns a new list containing data from a sub-range of the linked list
   linkedList * result = new linkedList();
   for (int i = start; i < length + start; i++) result->add(get(i)->dataPtr);
   return result;
 }
 
-bool linkedList::equals(linkedList * other) {//Returns true if this list and the specified list contain the same data in the same order
+bool linkedList::equals(linkedList * other) {//Returns true if the linked list and the specified linked list contain the same data in the same order
   bool result = size()==other->size();//auto false if differnt sizes
   if (result){
     node * thisListNode = head;
