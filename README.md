@@ -8,8 +8,7 @@ Clears and deletes all nodes and data.
 ### Add
 `void add(void * newData)`  
 Adds a new node with specified data to the end of the linked list.  
-#### Parameters
-`void * newData`: pointer to new data to be stored  
+Parameters: `void * newData`: pointer to new data to be stored  
 ### Size
 `int size()`  
 Returns the number of nodes.  
