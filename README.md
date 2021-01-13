@@ -36,7 +36,7 @@ Returns true if the linked list has no elements in it.
 Returns: `bool`: whether the linked list is empty  
 ## Swap
 `void swap(const int index1, const int index2)`  
-Switches the data pointers of the specified indexes.  
+Switches the data pointers of the nodes at the specified indexes.  
 Parameters: `const int index1`: index of the first specified node, `const int index2`: index of the second specified node  
 ### Sub List
 `linkedList * subList(const int start, const int length)`  
