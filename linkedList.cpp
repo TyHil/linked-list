@@ -23,6 +23,7 @@ void linkedList::clear() {// Clears and deletes all nodes and data
     delete i;
     i = temp;
   }
+  head = NULL;
 }
 
 void linkedList::add(void * newData) {// Adds a new node with specified data to the end of the linked list
@@ -107,22 +108,8 @@ void linkedList::swap(const int index1, const int index2) {// Switches the data 
 
 linkedList * linkedList::subList(const int start, const int length) {//Creates and returns a new list containing data from a sub-range of the linked list
   linkedList * result = new linkedList();
-  for (int i = start; i < length + start; i++) result->add(get(i)->dataPtr);
-  return result;
-}
-
-bool linkedList::equals(linkedList * other) {//Returns true if the linked list and the specified linked list contain the same data in the same order
-  bool result = size()==other->size();//auto false if differnt sizes
-  if (result){
-    node * thisListNode = head;
-    node * otherListNode = other->get(0);
-    for (int i = 0; i < size() and result; i++) {
-      if(thisListNode->dataPtr != otherListNode->dataPtr) {
-        result = false;
-      }
-      thisListNode = thisListNode->next;
-      otherListNode = otherListNode->next;
-    }
+  for (int i = start; i < length + start; i++) {
+    result->add(get(i)->dataPtr);
   }
   return result;
 }

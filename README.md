@@ -1,6 +1,7 @@
 # linked-list
 ## Description
 A singly linked list C++ library
+Note: Data classes must overload the `==` operator for the `bool equals(linkedList * other)` method to work.  
 ## Documentation
 ### Clear
 `void clear()`  
@@ -43,10 +44,5 @@ Parameters: `const int index1`: index of the first specified node, `const int in
 Creates and returns a new list containing data from a sub-range of the linked list.  
 Parameters: `const int start`: starting index of the sub-range, `const int length`: length of the sub-range (start + length is not included in the new linked list)  
 Returns: `linkedList *`: a pointer to the new linked list  
-### Equals
-`bool equals(linkedList * other)`  
-Returns true if the linked list and the specified linked list contain the same data in the same order.  
-Parameters: `linkedList * other`: a pointer to the other list to compare to  
-Returns: `bool`: whether the lists are the same  
 ## License
 GPL-3.0 License

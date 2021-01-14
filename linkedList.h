@@ -21,5 +21,4 @@ class linkedList {
     bool isEmpty();// Returns true if the linked list has no elements in it
     void swap(const int index1, const int index2);// Switches the data pointers of the nodes at the specified indexes
     linkedList * subList(const int start, const int length);// Creates and returns a new list containing data from a sub-range of the linked list
-    bool equals(linkedList * other);// Returns true if the linked list and the specified linked list contain the same data in the same order
 };

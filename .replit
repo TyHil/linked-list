@@ -1,0 +1,2 @@
+language = "cpp"
+run = "clang++ -std=c++2a *.cpp -o test && chmod 744 test && ./test"
