@@ -1,6 +1,6 @@
 # linked-list
 ## Description
-A singly linked list C++ library
+A singly linked list C++ library  
 Note: Data classes must overload the `==` operator for the `bool equals(linkedList * other)` method to work.  
 ## Documentation
 ### Clear
