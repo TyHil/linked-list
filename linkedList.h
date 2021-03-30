@@ -1,4 +1,4 @@
-#include <ostream>
+#include <stdlib.h>// fro free()
 
 struct node {
   ~node();
