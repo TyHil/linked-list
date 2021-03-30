@@ -2,21 +2,21 @@
 
 /*Node Methods*/
 
-node::~node() {// Destructor
+node::~node() { //Destructor
   free(dataPtr);
 }
 
 /*Linked List Methods*/
 
-linkedList::linkedList() {// Constructor
+linkedList::linkedList() { //Constructor
   head = NULL;
 }
 
-linkedList::~linkedList() {// Destructor
+linkedList::~linkedList() { //Destructor
   clear();
 }
 
-void linkedList::clear() {// Clears and deletes all nodes and data
+void linkedList::clear() { //Clears and deletes all nodes and data
   node * i = head;
   while (i != NULL) {
     node * temp = i->next;
@@ -26,21 +26,21 @@ void linkedList::clear() {// Clears and deletes all nodes and data
   head = NULL;
 }
 
-void linkedList::add(void * newData) {// Adds a new node with specified data to the end of the linked list
+void linkedList::add(void * newData) { //Adds a new node with specified data to the end of the linked list
   node *newNode = new node;
   newNode->next = NULL;
   newNode->dataPtr = newData;
-  if (head == NULL) {// replace head
+  if (head == NULL) { //replace head
     head = newNode;
-  } else {// add to end
+  } else { //add to end
     node *i = head;
-    while (i->next != NULL) i = i->next;// find end
+    while (i->next != NULL) i = i->next; //find end
     i->next = newNode;
   }
-  //insert(size(), newData);// use instead of above code to optimize for storage
+  //insert(size(), newData); //use instead of above code to optimize for storage
 }
 
-int linkedList::size() {// Returns the number of nodes
+int linkedList::size() { //Returns the number of nodes
   node * i = head;
   int index = 0;
   while (i != NULL) {
@@ -50,7 +50,7 @@ int linkedList::size() {// Returns the number of nodes
   return index;
 }
 
-node * linkedList::get(const int indexGoal) {// Returns a pointer to the node at a specific index
+node * linkedList::get(const int indexGoal) { //Returns a pointer to the node at a specific index
   node * i = head;
   int index = 0;
   while (index != indexGoal and i != NULL) {
@@ -60,18 +60,18 @@ node * linkedList::get(const int indexGoal) {// Returns a pointer to the node at
   return i;
 }
 
-void linkedList::set(const int indexGoal, void * newData) {// Replaces the data of node at the specified index with new data
+void linkedList::set(const int indexGoal, void * newData) { //Replaces the data of node at the specified index with new data
   node * i = get(indexGoal);
   free(i->dataPtr);
   i->dataPtr = newData;
 }
 
-void linkedList::insert(const int indexGoal, void * newData) {// Inserts a new node and new data before the specified index
-  if (indexGoal == 0) {// replace head
+void linkedList::insert(const int indexGoal, void * newData) { //Inserts a new node and new data before the specified index
+  if (indexGoal == 0) { //replace head
     node * newNode = new node;
     newNode->dataPtr = newData;
-    if (head != NULL) newNode->next = head;// not empty
-    else delete head;// empty
+    if (head != NULL) newNode->next = head; //not empty
+    else delete head; //empty
     head = newNode;
   } else {
     node * newNode = new node;
@@ -82,7 +82,7 @@ void linkedList::insert(const int indexGoal, void * newData) {// Inserts a new n
   }
 }
 
-void linkedList::remove(const int indexGoal) {// Removes the node and data at the specified index
+void linkedList::remove(const int indexGoal) { //Removes the node and data at the specified index
   if (indexGoal == 0) {
     node * i = get(1);
     delete head;
@@ -94,11 +94,11 @@ void linkedList::remove(const int indexGoal) {// Removes the node and data at th
   }
 }
 
-bool linkedList::isEmpty() {// Returns true if the linked list has no elements in it
+bool linkedList::isEmpty() { //Returns true if the linked list has no elements in it
   return head == NULL;
 }
 
-void linkedList::swap(const int index1, const int index2) {// Switches the data pointers of the specified indexes
+void linkedList::swap(const int index1, const int index2) { //Switches the data pointers of the specified indexes
   node * i = get(index1);
   node * j = get(index2);
   void * temp = i->dataPtr;
