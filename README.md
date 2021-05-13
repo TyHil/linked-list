@@ -2,7 +2,6 @@
 [![Run on Repl.it](https://repl.it/badge/github/TyHil/linked-list)](https://repl.it/github/TyHil/linked-list)
 ## Description
 A singly linked list C++ library  
-Note: Data classes must overload the `==` operator for the `bool equals(linkedList * other)` method to work.  
 ## Documentation
 ### Clear
 `void clear()`  

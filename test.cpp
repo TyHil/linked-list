@@ -5,15 +5,10 @@ using namespace std;
 
 /*Test Data Class*/
 
-class testData {
-  friend bool operator == (const testData & lhs, const testData & rhs);
-  public:
-    int card;
-    int suit;
+struct testData {
+  int card;
+  int suit;
 };
-bool operator == (const testData & lhs, const testData * rhs) {
-  return lhs.card == rhs->card and lhs.suit == rhs->suit;
-}
 
 /*Print Linked List Function*/
 
