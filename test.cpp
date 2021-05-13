@@ -17,10 +17,10 @@ bool operator == (const testData & lhs, const testData * rhs) {
 
 /*Print Linked List Function*/
 
-void printLinkedList(linkedList * list) {
+void printLinkedList(linkedList<testData> * list) {
   cout << "Linked List:\nSize: " << list->size() << "\nData:";
   for (uint8_t i = 0; i < list->size(); i++) {
-    node * test = list->get(i);
+    node<testData> * test = list->get(i);
     cout << "\nCard: " << ((testData*)test->dataPtr)->card << " Suit: " << ((testData*)test->dataPtr)->suit;
   }
   cout << "\n\n";
@@ -29,7 +29,7 @@ void printLinkedList(linkedList * list) {
 /*Main Test Code*/
 
 int main() {
-  linkedList * testLinkedList = new linkedList();
+  linkedList<testData> * testLinkedList = new linkedList<testData>();
   int cardData[10] = {1, 5, 8, 7, 1, 10, 13, 2, 9, 4};
   int suitData[10] = {3, 1, 3, 2, 0, 0, 1, 2, 0, 3};
 
@@ -42,7 +42,7 @@ int main() {
   cout << "Inital Data Added:\n";
   printLinkedList(testLinkedList);
 
-  linkedList * newSubList = testLinkedList->subList(0, 5);
+  linkedList<testData> * newSubList = testLinkedList->subList(0, 5);
   cout << "New Sub List Created:\n";
   printLinkedList(newSubList);
 
