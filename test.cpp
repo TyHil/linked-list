@@ -13,10 +13,10 @@ struct testData {
 /*Print Linked List Function*/
 
 void printLinkedList(linkedList<testData> * list) {
-  cout << "Linked List:\nSize: " << list->size() << "\nData:";
+  cout << "Linked List Print:\n\tSize: " << list->size() << "\n\tData:";
   for (uint8_t i = 0; i < list->size(); i++) {
     node<testData> * test = list->get(i);
-    cout << "\nCard: " << ((testData*)test->dataPtr)->card << " Suit: " << ((testData*)test->dataPtr)->suit;
+    cout << "\n\tCard: " << ((testData*)test->dataPtr)->card << " Suit: " << ((testData*)test->dataPtr)->suit;
   }
   cout << "\n\n";
 }
@@ -34,38 +34,38 @@ int main() {
     testAdd->suit = suitData[i];
     testLinkedList->add(testAdd);
   }
-  cout << "Inital Data Added:\n";
+  cout << "Inital data added:\n";
   printLinkedList(testLinkedList);
 
-  linkedList<testData> * newSubList = testLinkedList->subList(0, 5);
-  cout << "New Sub List Created:\n";
+  linkedList<testData> * newSubList = testLinkedList->subList(1, 5);
+  cout << "New sub list created from 1 length 5:\n";
   printLinkedList(newSubList);
 
   testData * testSet = new testData();
   testSet->card = 56;
   testSet->suit = 5;
   testLinkedList->set(2, testSet);
-  cout << "After Set:\n";
+  cout << "After set 2:\n";
   printLinkedList(testLinkedList);
 
   testData * testInsert = new testData();
   testInsert->card = 100;
   testInsert->suit = 6;
-  testLinkedList->set(8, testInsert);
-  cout << "After Insert:\n";
+  testLinkedList->insert(8, testInsert);
+  cout << "After insert 8:\n";
   printLinkedList(testLinkedList);
 
   testLinkedList->remove(9);
-  cout << "After Remove:\n";
+  cout << "After remove 9:\n";
   printLinkedList(testLinkedList);
 
   testLinkedList->swap(2, 8);
-  cout << "After Swap:\n";
+  cout << "After swap 2 and 8:\n";
   printLinkedList(testLinkedList);
 
-  cout << "Before Clear:\n";
+  cout << "Before clear:\n";
   cout << "isEmpty: " << testLinkedList->isEmpty() << "\n";
   testLinkedList->clear();
-  cout << "After Clear:\n";
+  cout << "After clear:\n";
   cout << "isEmpty: " << testLinkedList->isEmpty() << "\n";
 }
