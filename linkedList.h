@@ -12,7 +12,7 @@ template <typename T> node<T>::~node() { //Destructor
 /*Linked List*/
 
 template <typename T> class linkedList {
-  node<T> *head; //start node
+  node<T> * head; //start node
   public:
     linkedList();
     ~linkedList();
@@ -82,7 +82,7 @@ template <typename T> node<T> * linkedList<T>::get(const int indexGoal) { //Retu
 
 template <typename T> void linkedList<T>::set(const int indexGoal, T * newData) { //Replaces the data of node at the specified index with new data
   node<T> * i = get(indexGoal);
-  free(i->dataPtr);
+  delete i->dataPtr;
   i->dataPtr = newData;
 }
 
