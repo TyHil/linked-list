@@ -12,7 +12,7 @@ template <typename T> node<T>::~node() { //Destructor
 /*Linked List*/
 
 template <typename T> class linkedList {
-  node<T> * head; //start node
+  node<T> * head; //Start node
   int length;
   public:
     linkedList();
@@ -132,11 +132,11 @@ template <typename T> void linkedList<T>::swap(const int index1, const int index
   j->dataPtr = temp;
 }
 
-template <typename T> linkedList<T> * linkedList<T>::subList(const int start, const int length) {//Creates and returns a new list containing data from a sub-range of the linked list
+template <typename T> linkedList<T> * linkedList<T>::subList(const int start, const int listLength) { //Creates and returns a new list containing data from a sub-range of the linked list
   linkedList * result = new linkedList();
-  for (int i = start; i < length + start; i++) {
+  for (int i = start; i < listLength + start; i++) {
     result->add(get(i)->dataPtr);
   }
-  result->length = length;
+  result->length = listLength;
   return result;
 }
