@@ -11,12 +11,12 @@ template <typename T> node<T>::~node() { //Destructor
 
 /*Linked List*/
 
-template <typename T> class linkedList {
+template <typename T> class LinkedList {
   node<T> * head; //Start node
   int length;
   public:
-    linkedList();
-    ~linkedList();
+    LinkedList();
+    ~LinkedList();
     void clear();
     void add(T * newData);
     int size();
@@ -26,18 +26,18 @@ template <typename T> class linkedList {
     void remove(const int indexGoal);
     bool isEmpty();
     void swap(const int index1, const int index2);
-    linkedList * subList(const int start, const int length);
+    LinkedList * subList(const int start, const int length);
 };
 
-template <typename T> linkedList<T>::linkedList() { //Constructor
+template <typename T> LinkedList<T>::LinkedList() { //Constructor
   head = nullptr;
 }
 
-template <typename T> linkedList<T>::~linkedList() { //Destructor
+template <typename T> LinkedList<T>::~LinkedList() { //Destructor
   clear();
 }
 
-template <typename T> void linkedList<T>::clear() { //Clears and deletes all nodes and data
+template <typename T> void LinkedList<T>::clear() { //Clears and deletes all nodes and data
   node<T> * i = head;
   while (i != nullptr) {
     node<T> * temp = i->next;
@@ -48,7 +48,7 @@ template <typename T> void linkedList<T>::clear() { //Clears and deletes all nod
   length = 0;
 }
 
-template <typename T> void linkedList<T>::add(T * newData) { //Adds a new node with specified data to the end of the linked list
+template <typename T> void LinkedList<T>::add(T * newData) { //Adds a new node with specified data to the end of the linked list
   node<T> * newNode = new node<T>;
   newNode->next = nullptr;
   newNode->dataPtr = newData;
@@ -63,7 +63,7 @@ template <typename T> void linkedList<T>::add(T * newData) { //Adds a new node w
   //insert(size(), newData); //use instead of above code to optimize for storage
 }
 
-template <typename T> int linkedList<T>::size() { //Returns the number of nodes
+template <typename T> int LinkedList<T>::size() { //Returns the number of nodes
   //Full count
   /*node<T> * i = head;
   int index = 0;
@@ -74,7 +74,7 @@ template <typename T> int linkedList<T>::size() { //Returns the number of nodes
   return length;
 }
 
-template <typename T> node<T> * linkedList<T>::get(const int indexGoal) { //Returns a pointer to the node at a specific index
+template <typename T> node<T> * LinkedList<T>::get(const int indexGoal) { //Returns a pointer to the node at a specific index
   node<T> * i = head;
   int index = 0;
   while (index != indexGoal and i != nullptr) {
@@ -84,13 +84,13 @@ template <typename T> node<T> * linkedList<T>::get(const int indexGoal) { //Retu
   return i;
 }
 
-template <typename T> void linkedList<T>::set(const int indexGoal, T * newData) { //Replaces the data of node at the specified index with new data
+template <typename T> void LinkedList<T>::set(const int indexGoal, T * newData) { //Replaces the data of node at the specified index with new data
   node<T> * i = get(indexGoal);
   delete i->dataPtr;
   i->dataPtr = newData;
 }
 
-template <typename T> void linkedList<T>::insert(const int indexGoal, T * newData) { //Inserts a new node and new data before the specified index
+template <typename T> void LinkedList<T>::insert(const int indexGoal, T * newData) { //Inserts a new node and new data before the specified index
   if (indexGoal == 0) { //replace head
     node<T> * newNode = new node<T>;
     newNode->dataPtr = newData;
@@ -107,7 +107,7 @@ template <typename T> void linkedList<T>::insert(const int indexGoal, T * newDat
   length++;
 }
 
-template <typename T> void linkedList<T>::remove(const int indexGoal) { //Removes the node and data at the specified index
+template <typename T> void LinkedList<T>::remove(const int indexGoal) { //Removes the node and data at the specified index
   if (indexGoal == 0) {
     node<T> * i = get(1);
     delete head;
@@ -120,11 +120,11 @@ template <typename T> void linkedList<T>::remove(const int indexGoal) { //Remove
   length--;
 }
 
-template <typename T> bool linkedList<T>::isEmpty() { //Returns true if the linked list has no elements in it
+template <typename T> bool LinkedList<T>::isEmpty() { //Returns true if the linked list has no elements in it
   return head == nullptr;
 }
 
-template <typename T> void linkedList<T>::swap(const int index1, const int index2) { //Switches the data pointers of the specified indexes
+template <typename T> void LinkedList<T>::swap(const int index1, const int index2) { //Switches the data pointers of the specified indexes
   node<T> * i = get(index1);
   node<T> * j = get(index2);
   T * temp = i->dataPtr;
@@ -132,8 +132,8 @@ template <typename T> void linkedList<T>::swap(const int index1, const int index
   j->dataPtr = temp;
 }
 
-template <typename T> linkedList<T> * linkedList<T>::subList(const int start, const int listLength) { //Creates and returns a new list containing data from a sub-range of the linked list
-  linkedList * result = new linkedList();
+template <typename T> LinkedList<T> * LinkedList<T>::subList(const int start, const int listLength) { //Creates and returns a new list containing data from a sub-range of the linked list
+  LinkedList * result = new LinkedList();
   for (int i = start; i < listLength + start; i++) {
     result->add(get(i)->dataPtr);
   }

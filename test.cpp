@@ -1,4 +1,4 @@
-#include "linkedList.h"
+#include "LinkedList.h"
 #include <iostream>
 
 using namespace std;
@@ -12,7 +12,7 @@ struct testData {
 
 /*Print Linked List Function*/
 
-void printLinkedList(linkedList<testData> * list) {
+void printLinkedList(LinkedList<testData> * list) {
   cout << "Linked List Print:\n\tSize: " << list->size() << "\n\tData:";
   for (uint8_t i = 0; i < list->size(); i++) {
     node<testData> * test = list->get(i);
@@ -24,7 +24,7 @@ void printLinkedList(linkedList<testData> * list) {
 /*Main Test Code*/
 
 int main() {
-  linkedList<testData> * testLinkedList = new linkedList<testData>();
+  LinkedList<testData> * testLinkedList = new LinkedList<testData>();
   int cardData[10] = {1, 5, 8, 7, 1, 10, 13, 2, 9, 4};
   int suitData[10] = {3, 1, 3, 2, 0, 0, 1, 2, 0, 3};
 
@@ -37,7 +37,7 @@ int main() {
   cout << "Inital data added:\n";
   printLinkedList(testLinkedList);
 
-  linkedList<testData> * newSubList = testLinkedList->subList(1, 5);
+  LinkedList<testData> * newSubList = testLinkedList->subList(1, 5);
   cout << "New sub list created from 1 length 5:\n";
   printLinkedList(newSubList);
 
