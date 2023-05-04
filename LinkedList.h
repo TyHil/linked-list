@@ -33,7 +33,8 @@ public:
   friend std::ostream &operator<<(std::ostream &, const LinkedList<U *> &);
 };
 
-template <typename T> Node<T *>::~Node() { // Destructor
+// Destructor
+template <typename T> Node<T *>::~Node() {
   delete data;
 }
 
@@ -42,14 +43,25 @@ template <typename T> Node<T *>::~Node() { // Destructor
 class LinkedListBase {
 protected:
   int length;
+  void rangeCheck(const int);
 
 public:
   int size();
 };
 
+// Returns the number of Nodes
+int LinkedListBase::size() { return length; }
+
+void LinkedListBase::rangeCheck(const int index) {
+  if (index < 0 || index >= length) {
+    throw std::out_of_range("Index out of range.");
+  }
+}
+
 template <typename T> class LinkedList : public LinkedListBase {
 protected:
   Node<T> *head; // Start Node
+  Node<T> *get(const int);
 
 public:
   LinkedList();
@@ -57,7 +69,6 @@ public:
   ~LinkedList();
   void clear();
   void add(T);
-  Node<T> *get(const int);
   void set(const int, T);
   void insert(const int, T);
   void remove(const int);
@@ -65,7 +76,7 @@ public:
   void swap(const int, const int);
   LinkedList *subList(const int, const int);
 
-  T operator[](int);
+  T operator[](const int);
   template <typename U>
   friend std::ostream &operator<<(std::ostream &, const LinkedList<U> &);
 };
@@ -73,11 +84,11 @@ public:
 template <typename T> class LinkedList<T *> : public LinkedListBase {
 protected:
   Node<T *> *head; // Start Node
+  Node<T *> *get(const int);
 
 public:
   void clear();
   void add(T *);
-  Node<T *> *get(const int);
   void set(const int, T *);
   void insert(const int, T *);
   void remove(const int);
@@ -85,10 +96,32 @@ public:
   void swap(const int, const int);
   LinkedList<T *> *subList(const int, const int);
 
-  T *operator[](int);
+  T *operator[](const int);
   template <typename U>
   friend std::ostream &operator<<(std::ostream &, const LinkedList<U *> &);
 };
+
+// Returns a pointer to the Node at a specific index
+template <typename T> Node<T> *LinkedList<T>::get(const int index) {
+  rangeCheck(index);
+  Node<T> *i = head;
+  int indexGoal = 0;
+  while (indexGoal != index and i != nullptr) {
+    i = i->next;
+    indexGoal++;
+  }
+  return i;
+}
+template <typename T> Node<T *> *LinkedList<T *>::get(const int index) {
+  rangeCheck(index);
+  Node<T *> *i = head;
+  int indexGoal = 0;
+  while (indexGoal != index and i != nullptr) {
+    i = i->next;
+    indexGoal++;
+  }
+  return i;
+}
 
 // Constructor
 template <typename T> LinkedList<T>::LinkedList() { head = nullptr; }
@@ -160,36 +193,13 @@ template <typename T> void LinkedList<T *>::add(T *data) {
   length++;
 }
 
-// Returns the number of Nodes
-int LinkedListBase::size() {
-  return length;
-}
-
-// Returns a pointer to the Node at a specific index
-template <typename T> Node<T> *LinkedList<T>::get(const int index) {
-  Node<T> *i = head;
-  int indexGoal = 0;
-  while (indexGoal != index and i != nullptr) {
-    i = i->next;
-    indexGoal++;
-  }
-  return i;
-}
-template <typename T> Node<T *> *LinkedList<T *>::get(const int index) {
-  Node<T *> *i = head;
-  int indexGoal = 0;
-  while (indexGoal != index and i != nullptr) {
-    i = i->next;
-    indexGoal++;
-  }
-  return i;
-}
-
 // Replaces the data of node at the specified index with new data
 template <typename T> void LinkedList<T>::set(const int index, T data) {
+  rangeCheck(index);
   get(index)->data = data;
 }
 template <typename T> void LinkedList<T *>::set(const int index, T *data) {
+  rangeCheck(index);
   Node<T *> *i = get(index);
   delete i->data;
   i->data = data;
@@ -197,6 +207,7 @@ template <typename T> void LinkedList<T *>::set(const int index, T *data) {
 
 // Inserts a new node and new data before the specified index
 template <typename T> void LinkedList<T>::insert(const int index, T data) {
+  rangeCheck(index);
   if (index == 0) { // replace head
     Node<T> *newNode = new Node<T>(data);
     if (head != nullptr)
@@ -209,6 +220,7 @@ template <typename T> void LinkedList<T>::insert(const int index, T data) {
   length++;
 }
 template <typename T> void LinkedList<T *>::insert(const int index, T *data) {
+  rangeCheck(index);
   if (index == 0) { // replace head
     Node<T *> *newNode = new Node<T *>(data);
     if (head != nullptr)
@@ -223,6 +235,7 @@ template <typename T> void LinkedList<T *>::insert(const int index, T *data) {
 
 // Removes the node and data at the specified index
 template <typename T> void LinkedList<T>::remove(const int index) {
+  rangeCheck(index);
   if (index == 0) {
     Node<T> *i = get(1);
     delete head;
@@ -235,6 +248,7 @@ template <typename T> void LinkedList<T>::remove(const int index) {
   length--;
 }
 template <typename T> void LinkedList<T *>::remove(const int index) {
+  rangeCheck(index);
   if (index == 0) {
     Node<T *> *i = get(1);
     delete head;
@@ -248,16 +262,14 @@ template <typename T> void LinkedList<T *>::remove(const int index) {
 }
 
 // Returns true if the linked list has no elements in it
-template <typename T> bool LinkedList<T>::empty() {
-  return head == nullptr;
-}
-template <typename T> bool LinkedList<T*>::empty() {
-  return head == nullptr;
-}
+template <typename T> bool LinkedList<T>::empty() { return head == nullptr; }
+template <typename T> bool LinkedList<T *>::empty() { return head == nullptr; }
 
 // Switches the data pointers of the specified indexes
 template <typename T>
 void LinkedList<T>::swap(const int index1, const int index2) {
+  rangeCheck(index1);
+  rangeCheck(index2);
   Node<T> *i = get(index1);
   Node<T> *j = get(index2);
   T temp = i->data;
@@ -266,6 +278,8 @@ void LinkedList<T>::swap(const int index1, const int index2) {
 }
 template <typename T>
 void LinkedList<T *>::swap(const int index1, const int index2) {
+  rangeCheck(index1);
+  rangeCheck(index2);
   Node<T *> *i = get(index1);
   Node<T *> *j = get(index2);
   T *temp = i->data;
@@ -277,6 +291,10 @@ void LinkedList<T *>::swap(const int index1, const int index2) {
 // list
 template <typename T>
 LinkedList<T> *LinkedList<T>::subList(const int start, const int length) {
+  rangeCheck(start);
+  if (start + length < 0 || start + length >= this->length) {
+    throw std::out_of_range("Length out of range.");
+  }
   LinkedList *result = new LinkedList<T>();
   Node<T> *i = get(start);
   if (i != nullptr) {
@@ -298,6 +316,10 @@ LinkedList<T> *LinkedList<T>::subList(const int start, const int length) {
 }
 template <typename T>
 LinkedList<T *> *LinkedList<T *>::subList(const int start, const int length) {
+  rangeCheck(start);
+  if (start + length < 0 || start + length >= this->length) {
+    throw std::out_of_range("Length out of range.");
+  }
   LinkedList *result = new LinkedList<T *>();
   Node<T *> *i = get(start);
   if (i != nullptr) {
@@ -319,10 +341,12 @@ LinkedList<T *> *LinkedList<T *>::subList(const int start, const int length) {
 }
 
 // Allows accessing the list with the bracket operator
-template <typename T> T LinkedList<T>::operator[](int index) {
+template <typename T> T LinkedList<T>::operator[](const int index) {
+  rangeCheck(index);
   return get(index)->data;
 }
-template <typename T> T *LinkedList<T *>::operator[](int index) {
+template <typename T> T *LinkedList<T *>::operator[](const int index) {
+  rangeCheck(index);
   return get(index)->data;
 }
 
