@@ -1,93 +1,377 @@
-#include "LinkedList.h"
 #include <iostream>
 
-using namespace std;
+template <typename T> class LinkedList;
 
-/*Card Object Test Class*/
+/*Node*/
 
-struct Card {
-  int number;
-  char suit;
-  Card() : number(0), suit(0) {}
-  Card(int number, int suit) : number(number), suit(suit) {}
-  Card(Card const &source) : number(source.number), suit(source.suit) {}
-  friend ostream &operator<<(ostream &, const Card &);
+template <typename T> class Node {
+  T data;
+  Node<T> *next;
+
+public:
+  Node() : data(NULL), next(nullptr) {}
+  Node(T data) : data(data), next(nullptr) {}
+  Node(T data, Node<T> *next) : data(data), next(next) {}
+  Node(Node<T> *source) : data(source->data), next(source->next) {}
+  friend class LinkedList<T>;
+  template <typename U>
+  friend std::ostream &operator<<(std::ostream &, const LinkedList<U> &);
 };
 
-ostream &operator<<(ostream &os, const Card &data) {
-  os << data.number << data.suit;
-  return os;
+template <typename T> class Node<T *> {
+  T *data;
+  Node<T *> *next;
+
+public:
+  Node() : data(nullptr), next(nullptr) {}
+  Node(T *data) : data(data), next(nullptr) {}
+  Node(T *data, Node<T *> *next) : data(data), next(next) {}
+  Node(Node<T *> *source) : data(source->data), next(source->next) {}
+  ~Node();
+  friend class LinkedList<T *>;
+  template <typename U>
+  friend std::ostream &operator<<(std::ostream &, const LinkedList<U *> &);
+};
+
+// Destructor
+template <typename T> Node<T *>::~Node() {
+  delete data;
 }
 
-/*Main Test Code*/
+/*Linked List*/
 
-int main() {
-  cout << "Object tests:" << endl;
-  LinkedList<Card *> objectLinkedList = LinkedList<Card *>();
-  int numberData[10] = {1, 5, 8, 7, 1, 10, 13, 2, 9, 4};
-  int suitData[10] = {'s', 'd', 's', 'h', 'c', 'c', 'd', 'h', 'c', 's'};
-  for (uint8_t i = 0; i < 10; i++) {
-    objectLinkedList.add(new Card(numberData[i], suitData[i]));
+class LinkedListBase {
+protected:
+  int length;
+  void rangeCheck(const int);
+
+public:
+  int size();
+};
+
+// Returns the number of Nodes
+int LinkedListBase::size() { return length; }
+
+void LinkedListBase::rangeCheck(const int index) {
+  if (index < 0 || index >= length) {
+    throw std::out_of_range("Index out of range.");
   }
-  cout << "Inital data added: " << objectLinkedList << endl;
+}
 
-  LinkedList<Card *> *objectCopyLinkedList =
-      new LinkedList<Card *>(objectLinkedList);
-  cout << "Copy of list: " << *objectCopyLinkedList << endl;
+template <typename T> class LinkedList : public LinkedListBase {
+protected:
+  Node<T> *head; // Start Node
+  Node<T> *get(const int);
 
-  LinkedList<Card *> *objectSubLinkedList = objectLinkedList.subList(2, 5);
-  cout << "New sub list created from 2 length 5: " << *objectSubLinkedList
-       << " length: " << objectSubLinkedList->size()<< endl;
+public:
+  LinkedList();
+  LinkedList(LinkedList const &);
+  ~LinkedList();
+  void clear();
+  void add(T);
+  void set(const int, T);
+  void insert(const int, T);
+  void remove(const int);
+  bool empty();
+  void swap(const int, const int);
+  LinkedList *subList(const int, const int);
 
-  objectLinkedList.set(2, new Card(1, 's'));
-  cout << "After set at 2: " << objectLinkedList << endl;
+  T operator[](const int);
+  template <typename U>
+  friend std::ostream &operator<<(std::ostream &, const LinkedList<U> &);
+};
 
-  objectLinkedList.insert(8, new Card(12, 'h'));
-  cout << "After insert at 8: " << objectLinkedList << endl;
+template <typename T> class LinkedList<T *> : public LinkedListBase {
+protected:
+  Node<T *> *head; // Start Node
+  Node<T *> *get(const int);
 
-  objectLinkedList.remove(9);
-  cout << "After remove 9: " << objectLinkedList << endl;
+public:
+  void clear();
+  void add(T *);
+  void set(const int, T *);
+  void insert(const int, T *);
+  void remove(const int);
+  bool empty();
+  void swap(const int, const int);
+  LinkedList<T *> *subList(const int, const int);
 
-  objectLinkedList.swap(2, 8);
-  cout << "After swap 2 and 8: " << objectLinkedList << endl;
+  T *operator[](const int);
+  template <typename U>
+  friend std::ostream &operator<<(std::ostream &, const LinkedList<U *> &);
+};
 
-  cout << "Access 5: " << *objectLinkedList[5] << endl;
-
-  cout << "Before clear: empty: " << objectLinkedList.empty() << "" << endl;
-  objectLinkedList.clear();
-  cout << "After clear: empty: " << objectLinkedList.empty() << "" << endl;
-
-  cout << endl << "Primitive tests:" << endl;
-  LinkedList<int> primitiveLinkedList = LinkedList<int>();
-  for (int i = 0; i < 10; i++) {
-    primitiveLinkedList.add(i);
+// Returns a pointer to the Node at a specific index
+template <typename T> Node<T> *LinkedList<T>::get(const int index) {
+  rangeCheck(index);
+  Node<T> *i = head;
+  int indexGoal = 0;
+  while (indexGoal != index and i != nullptr) {
+    i = i->next;
+    indexGoal++;
   }
-  cout << "Inital data added: " << primitiveLinkedList << endl;
+  return i;
+}
+template <typename T> Node<T *> *LinkedList<T *>::get(const int index) {
+  rangeCheck(index);
+  Node<T *> *i = head;
+  int indexGoal = 0;
+  while (indexGoal != index and i != nullptr) {
+    i = i->next;
+    indexGoal++;
+  }
+  return i;
+}
 
-  LinkedList<int> *primitiveCopyLinkedList =
-      new LinkedList<int>(primitiveLinkedList);
-  cout << "Copy of list: " << *primitiveCopyLinkedList << endl;
+// Constructor
+template <typename T> LinkedList<T>::LinkedList() { head = nullptr; }
 
-  LinkedList<int> *primitiveSubLinkedList = primitiveLinkedList.subList(2, 5);
-  cout << "New sub list created from 2 length 5: " << *primitiveSubLinkedList
-       << " length: " << primitiveSubLinkedList->size() << endl;
+// Copy constructor
+template <typename T> LinkedList<T>::LinkedList(LinkedList const &source) {
+  Node<T> *i = source.head;
+  if (i != nullptr) {
+    head = new Node<T>(i->data);
+    Node<T> *lastSource = i;
+    Node<T> *lastDest = head;
+    i = i->next;
+    while (i != nullptr) {
+      lastDest->next = new Node<T>(i->data);
+      lastDest = lastDest->next;
+      lastSource = i;
+      i = i->next;
+    }
+  }
+  length = source.length;
+}
 
-  primitiveLinkedList.set(2, 12);
-  cout << "After set at 2: " << primitiveLinkedList << endl;
+// Destructor
+template <typename T> LinkedList<T>::~LinkedList() { clear(); }
 
-  Card *testInsert = new Card();
-  primitiveLinkedList.insert(8, 13);
-  cout << "After insert at 8: " << primitiveLinkedList << endl;
+// Clears and deletes all Nodes and data
+template <typename T> void LinkedList<T>::clear() {
+  Node<T> *i = head;
+  while (i != nullptr) {
+    Node<T> *temp = i->next;
+    delete i;
+    i = temp;
+  }
+  head = nullptr;
+  length = 0;
+}
+template <typename T> void LinkedList<T *>::clear() {
+  Node<T *> *i = head;
+  while (i != nullptr) {
+    Node<T *> *temp = i->next;
+    delete i;
+    i = temp;
+  }
+  head = nullptr;
+  length = 0;
+}
 
-  primitiveLinkedList.remove(9);
-  cout << "After remove 9: " << primitiveLinkedList << endl;
+// Adds a new node with specified data to the end of the linked list
+template <typename T> void LinkedList<T>::add(T data) {
+  if (head == nullptr) { // replace head
+    head = new Node<T>(data);
+  } else { // add to end
+    Node<T> *i = head;
+    while (i->next != nullptr)
+      i = i->next; // find end
+    i->next = new Node<T>(data);
+  }
+  length++;
+}
+template <typename T> void LinkedList<T *>::add(T *data) {
+  if (head == nullptr) { // replace head
+    head = new Node<T *>(data);
+  } else { // add to end
+    Node<T *> *i = head;
+    while (i->next != nullptr)
+      i = i->next; // find end
+    i->next = new Node<T *>(data);
+  }
+  length++;
+}
 
-  primitiveLinkedList.swap(2, 8);
-  cout << "After swap 2 and 8: " << primitiveLinkedList << endl;
+// Replaces the data of node at the specified index with new data
+template <typename T> void LinkedList<T>::set(const int index, T data) {
+  rangeCheck(index);
+  get(index)->data = data;
+}
+template <typename T> void LinkedList<T *>::set(const int index, T *data) {
+  rangeCheck(index);
+  Node<T *> *i = get(index);
+  delete i->data;
+  i->data = data;
+}
 
-  cout << "Access 5: " << primitiveLinkedList[5] << endl;
+// Inserts a new node and new data before the specified index
+template <typename T> void LinkedList<T>::insert(const int index, T data) {
+  rangeCheck(index);
+  if (index == 0) { // replace head
+    Node<T> *newNode = new Node<T>(data);
+    if (head != nullptr)
+      newNode->next = head; // not empty
+    head = newNode;
+  } else {
+    Node<T> *prev = get(index - 1);
+    prev->next = new Node<T>(data, prev->next);
+  }
+  length++;
+}
+template <typename T> void LinkedList<T *>::insert(const int index, T *data) {
+  rangeCheck(index);
+  if (index == 0) { // replace head
+    Node<T *> *newNode = new Node<T *>(data);
+    if (head != nullptr)
+      newNode->next = head; // not empty
+    head = newNode;
+  } else {
+    Node<T *> *prev = get(index - 1);
+    prev->next = new Node<T *>(data, prev->next);
+  }
+  length++;
+}
 
-  cout << "Before clear: empty: " << primitiveLinkedList.empty() << "" << endl;
-  primitiveLinkedList.clear();
-  cout << "After clear: empty: " << primitiveLinkedList.empty() << "" << endl;
+// Removes the node and data at the specified index
+template <typename T> void LinkedList<T>::remove(const int index) {
+  rangeCheck(index);
+  if (index == 0) {
+    Node<T> *i = get(1);
+    delete head;
+    head = i;
+  } else {
+    Node<T> *i = get(index);
+    get(index - 1)->next = i->next;
+    delete i;
+  }
+  length--;
+}
+template <typename T> void LinkedList<T *>::remove(const int index) {
+  rangeCheck(index);
+  if (index == 0) {
+    Node<T *> *i = get(1);
+    delete head;
+    head = i;
+  } else {
+    Node<T *> *i = get(index);
+    get(index - 1)->next = i->next;
+    delete i;
+  }
+  length--;
+}
+
+// Returns true if the linked list has no elements in it
+template <typename T> bool LinkedList<T>::empty() { return head == nullptr; }
+template <typename T> bool LinkedList<T *>::empty() { return head == nullptr; }
+
+// Switches the data pointers of the specified indexes
+template <typename T>
+void LinkedList<T>::swap(const int index1, const int index2) {
+  rangeCheck(index1);
+  rangeCheck(index2);
+  Node<T> *i = get(index1);
+  Node<T> *j = get(index2);
+  T temp = i->data;
+  i->data = j->data;
+  j->data = temp;
+}
+template <typename T>
+void LinkedList<T *>::swap(const int index1, const int index2) {
+  rangeCheck(index1);
+  rangeCheck(index2);
+  Node<T *> *i = get(index1);
+  Node<T *> *j = get(index2);
+  T *temp = i->data;
+  i->data = j->data;
+  j->data = temp;
+}
+
+// Creates and returns a new list containing data from a sub-range of the linked
+// list
+template <typename T>
+LinkedList<T> *LinkedList<T>::subList(const int start, const int length) {
+  rangeCheck(start);
+  if (start + length < 0 || start + length >= this->length) {
+    throw std::out_of_range("Length out of range.");
+  }
+  LinkedList *result = new LinkedList<T>();
+  Node<T> *i = get(start);
+  if (i != nullptr) {
+    result->head = new Node<T>(i->data);
+    Node<T> *lastSource = i;
+    Node<T> *lastDest = result->head;
+    i = i->next;
+    int lengthGoal = 1;
+    while (i != nullptr && lengthGoal < length) {
+      lastDest->next = new Node<T>(i->data);
+      lastDest = lastDest->next;
+      lastSource = i;
+      i = i->next;
+      lengthGoal++;
+    }
+  }
+  result->length = length;
+  return result;
+}
+template <typename T>
+LinkedList<T *> *LinkedList<T *>::subList(const int start, const int length) {
+  rangeCheck(start);
+  if (start + length < 0 || start + length >= this->length) {
+    throw std::out_of_range("Length out of range.");
+  }
+  LinkedList *result = new LinkedList<T *>();
+  Node<T *> *i = get(start);
+  if (i != nullptr) {
+    result->head = new Node<T *>(i->data);
+    Node<T *> *lastSource = i;
+    Node<T *> *lastDest = result->head;
+    i = i->next;
+    int lengthGoal = 1;
+    while (i != nullptr && lengthGoal < length) {
+      lastDest->next = new Node<T *>(i->data);
+      lastDest = lastDest->next;
+      lastSource = i;
+      i = i->next;
+      lengthGoal++;
+    }
+  }
+  result->length = length;
+  return result;
+}
+
+// Allows accessing the list with the bracket operator
+template <typename T> T LinkedList<T>::operator[](const int index) {
+  rangeCheck(index);
+  return get(index)->data;
+}
+template <typename T> T *LinkedList<T *>::operator[](const int index) {
+  rangeCheck(index);
+  return get(index)->data;
+}
+
+// Prints the list
+template <typename T>
+std::ostream &operator<<(std::ostream &os, const LinkedList<T> &list) {
+  Node<T> *i = list.head;
+  while (i != nullptr) {
+    os << i->data;
+    i = i->next;
+    if (i != nullptr) {
+      os << ", ";
+    }
+  }
+  return os;
+}
+template <typename T>
+std::ostream &operator<<(std::ostream &os, const LinkedList<T *> &list) {
+  Node<T *> *i = list.head;
+  while (i != nullptr) {
+    os << *(i->data);
+    i = i->next;
+    if (i != nullptr) {
+      os << ", ";
+    }
+  }
+  return os;
 }
